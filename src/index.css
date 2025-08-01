@@ -272,6 +272,31 @@ body {
     border-radius: 10px;
     margin-bottom: 15px;
 }
+/* Add this at the end of your index.css file, inside the Gameplay Screen section */
+
+#gameplay-header-info {
+    /* Make space for the new timer */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: center;
+    text-align: center;
+}
+
+.timer-display {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--primary-action);
+}
+
+.multiplier-display {
+    text-align: center;
+    font-family: var(--font-header);
+    font-size: 1.3em;
+    color: var(--star-color);
+    margin-bottom: 10px;
+    height: 20px; /* Reserve space so layout doesn't jump */
+    text-shadow: 1px 1px 2px var(--shadow);
+}
 
 /* --- Modals --- */
 .modal-backdrop {
@@ -438,7 +463,7 @@ body {
 /* --- Score Progress Bar Styles --- */
 .score-progress-bar-container {
   width: 100%;
-  height: 20px;
+  height: 35px;
   background-color: #ecf0f1;
   border-radius: 10px;
   border: 2px solid #bdc3c7;
@@ -454,21 +479,25 @@ body {
   transition: width 0.5s ease-out;
 }
 
+/* --- Score Progress Bar Styles --- */
+/* ... other rules ... */
+
 .score-progress-bar-star {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.5em;
+  transform: translate(-50%, -50%);
+  font-size: 1.4em; /* <--- INCREASED SIZE */
   color: var(--star-color-inactive);
+  /* ADDED: A subtle text shadow to make the star pop from the background */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
-
 .score-progress-bar-star.active {
   color: var(--star-color);
 }
 
 
 /* ================================================== */
-/* --- NEW: Responsive Design --- */
+/* --- Responsive Design --- */
 /* ================================================== */
 
 @media (max-width: 900px) {
@@ -517,4 +546,43 @@ body {
     .game-header {
         justify-content: center; /* Center the resources when title is gone */
     }
+}
+/* Add this to the end of your src/index.css file */
+
+.score-breakdown {
+  background-color: #ecf0f1;
+  border-radius: 10px;
+  padding: 15px 25px;
+  margin: 10px 0;
+  text-align: left;
+  width: 280px; /* Give it a fixed width */
+  border: 2px solid #bdc3c7;
+}
+
+.score-breakdown p {
+  font-size: 1.1em;
+  margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.score-breakdown span {
+  font-weight: bold;
+}
+
+.score-breakdown hr {
+  border: none;
+  border-top: 2px dashed var(--border-color);
+  margin: 10px 0;
+}
+
+.score-breakdown .total-score span {
+  font-size: 1.3em;
+  color: var(--primary-action);
+}
+
+.bonus-animation .bonus-points {
+  color: var(--star-color);
+  font-weight: bold;
+  font-size: 1.2em;
 }
