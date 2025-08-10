@@ -1,32 +1,50 @@
-// src/components/LevelSelectionScreen.jsx
-    
-export default function LevelSelectionScreen({ onLevelSelect }) {
+// src/components/LevelSelectionScreen.jsx - UPDATED
+
+import React, { useState } from 'react';
+import { initialLevels } from '../data/levelData';
+import PlayerResources from './PlayerResources';
+import './LevelSelectionScreen.css';
+
+const renderStars = (starCount) => {
+  return '★'.repeat(starCount) + '☆'.repeat(3 - starCount);
+};
+
+export default function LevelSelectionScreen({ onLevelSelect, onBackClick }) {
+  const [levels, setLevels] = useState(initialLevels);
+
   return (
-    <div id="level-selection-screen" className="screen">
-      <div className="level-map">
-        {/* Level 1 (completed) - Unchanged */}
-        <div className="level-marker completed" onClick={() => onLevelSelect(1)}>
-          <span>1</span><div className="stars">★★★</div>
-        </div>
+    <div id="level-selection-screen">
+      <div className="map-viewport">
+        <div className="level-map">
 
-        {/* Level 2 (completed) - Unchanged */}
-        <div className="level-marker completed" onClick={() => onLevelSelect(2)}>
-          <span>2</span><div className="stars">★☆☆</div>
-        </div>
+          <div className="map-ui-overlay">
+            <PlayerResources />
+            <h1 className="screen-title-on-map">Select Level</h1>
+            
+            {/* --- THIS IS THE FIX --- */}
+            {/* The button now has a proper closing tag </button> */}
+            <button className="button-icon map-back-button" onClick={onBackClick}></button>
 
-        {/* Level 3 (unlocked) - This is your new, working level */}
-        <div className="level-marker unlocked" onClick={() => onLevelSelect(3)}>
-          <span>3</span>
-        </div>
+          </div>
 
-        {/* Level 4 (locked) - Unchanged */}
-        <div className="level-marker locked">
-          <span>🔒</span>
-        </div>
-
-        {/* === CHANGE: Restored Level 5 to match the original design === */}
-        <div className="level-marker locked">
-          <span>🔒</span>
+          {/* The level markers are unchanged */}
+          {levels.map((level) => (
+            <div
+              key={level.id}
+              className={`level-marker ${level.status}`}
+              style={{
+                top: `${level.pos.y}%`,
+                left: `${level.pos.x}%`,
+              }}
+              onClick={() => level.status !== 'locked' && onLevelSelect(level.id)}
+            >
+              {level.status === 'locked' && <span>🔒</span>}
+              {level.status !== 'locked' && <span>{level.id}</span>}
+              {level.status === 'completed' && (
+                <div className="stars">{renderStars(level.stars)}</div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>

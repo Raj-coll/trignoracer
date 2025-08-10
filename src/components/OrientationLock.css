@@ -1,0 +1,40 @@
+.orientation-lock-overlay {
+  /* Hidden by default on desktop and in landscape mode */
+  display: none; 
+  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 9999; /* Ensure it's on top of everything */
+  
+  /* Flexbox to center the message */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+}
+
+.orientation-lock-message h1 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.orientation-lock-message p {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* 
+  The Magic: This media query targets screens that are BOTH in 
+  portrait orientation AND are likely mobile devices (max-width).
+*/
+@media screen and (orientation: portrait) and (max-width: 800px) {
+  .orientation-lock-overlay {
+    display: flex; /* Show the overlay */
+  }
+}

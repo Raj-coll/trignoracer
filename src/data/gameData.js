@@ -25,7 +25,7 @@ export const problems = {
         title: "Prove: (tanθ + secθ - 1) / (tanθ - secθ + 1) = (1 + sinθ) / cosθ",
         moves: { easy: 40, medium: 30, hard: 25 },
         // === CHANGE: Added score thresholds for stars ===
-        scoreThresholds: { oneStar: 8000, twoStars: 12000, threeStars: 15000 },
+        scoreThresholds: { oneStar: 3500, twoStars: 6000, threeStars: 10750 },
         steps: [
             { currentLHS: "(tanθ + secθ - 1) / (tanθ - secθ + 1)", explanation: "Replace '1' in the numerator using sec²θ - tan²θ = 1.", correctFormulaId: "pythagorean2_alt", distractorFormulaIds: ["pythagorean1", "quotient1", "reciprocal1"], nextLHS: "(tanθ + secθ - (sec²θ - tan²θ)) / (tanθ - secθ + 1)" },
             { currentLHS: "(tanθ + secθ - (sec²θ - tan²θ)) / (tanθ - secθ + 1)", explanation: "Factor the difference of squares: sec²θ - tan²θ.", correctFormulaId: "algebra_diff_squares", distractorFormulaIds: ["pythagorean2", "quotient2", "reciprocal2"], nextLHS: "(tanθ + secθ - (secθ - tanθ)(secθ + tanθ)) / (tanθ - secθ + 1)" },
@@ -42,7 +42,7 @@ export const problems = {
         title: "Prove: sin²θ / (1 - cosθ) = 1 + cosθ (assuming 1 - cosθ ≠ 0)",
         moves: { easy: 20, medium: 15, hard: 10 },
         // === CHANGE: Added score thresholds for stars ===
-        scoreThresholds: { oneStar: 3000, twoStars: 5000, threeStars: 7000 },
+        scoreThresholds: { oneStar: 2000, twoStars: 3000, threeStars: 5000 },
         steps: [
             { currentLHS: "sin²θ / (1 - cosθ)", explanation: "Replace sin²θ using sin²θ + cos²θ = 1.", correctFormulaId: "pythagorean1", distractorFormulaIds: ["pythagorean2", "quotient1", "reciprocal1"], nextLHS: "(1 - cos²θ) / (1 - cosθ)" },
             { currentLHS: "(1 - cos²θ) / (1 - cosθ)", explanation: "Factor the numerator (1 - cos²θ) as a difference of squares.", correctFormulaId: "algebra_diff_squares", distractorFormulaIds: ["pythagorean2_alt", "algebra_factor", "quotient2"], nextLHS: "((1 - cosθ)(1 + cosθ)) / (1 - cosθ)" },

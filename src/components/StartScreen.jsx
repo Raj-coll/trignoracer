@@ -1,5 +1,7 @@
 // src/components/StartScreen.jsx
 
+import FullscreenButton from './FullscreenButton.jsx'; // <-- 1. IMPORT THE BUTTON
+
 // This component receives two functions, 'onPlayClick' and 'onVersusClick',
 // from its parent component (App.jsx). These are passed as "props".
 export default function StartScreen({ onPlayClick, onVersusClick }) {
@@ -23,6 +25,10 @@ export default function StartScreen({ onPlayClick, onVersusClick }) {
         </div>
         <div className="start-screen-footer">
           <button id="settings-btn" className="button-icon">⚙️</button>
+          
+          {/* --- 2. ADD THE FULLSCREEN BUTTON HERE --- */}
+          <FullscreenButton /> 
+          
           <button id="profile-btn" className="button-icon">👤</button>
         </div>
       </div>

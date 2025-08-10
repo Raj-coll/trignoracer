@@ -1,0 +1,98 @@
+/* src/components/ScoreProgressBar.css */
+
+/*
+  The main container. This creates the yellow border and the grey "track".
+  Position: relative is crucial so the stars and marks inside can be positioned correctly.
+*/
+.new-progress-container {
+  position: relative;
+  width: 100%; /* The bar will take the full width of its parent */
+  max-width: 400px; /* You can set a max-width if you want */
+  height: 28px;
+  background-color: #e9e9e9;
+  border-radius: 50px;
+  border: 4px solid #ffdd40;
+  box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  margin: 20px 0 30px 0; /* Adds some space above and below the bar */
+}
+
+/*
+  The blue fill element. It grows from left to right.
+*/
+.new-progress-fill {
+  height: 100%;
+  background: linear-gradient(to top, #65c7f7, #0052d4);
+  border-radius: 50px;
+  transition: width 0.5s ease-in-out;
+}
+
+/*
+  A container that sits on top of the bar to hold the stars.
+  This makes positioning the stars easier.
+*/
+.new-progress-stars-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allows clicks to pass through if needed */
+}
+
+/*
+  Styling for each individual star.
+*/
+.new-progress-star {
+  position: absolute;
+  top: 50%;
+  font-size: 28px; /* A bit larger to look good */
+  transform: translate(-50%, -50%) scale(0.9); /* Center the star and make it slightly smaller */
+  filter: grayscale(1); /* Makes inactive stars grey */
+  opacity: 0.8;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
+}
+
+/*
+  When a star has the '.active' class, it becomes colorful, bigger, and glows.
+*/
+.new-progress-star.active {
+  filter: grayscale(0);
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2); /* Pop out effect */
+  text-shadow: 0 0 8px rgba(255, 223, 0, 0.9); /* Gold glow */
+}
+
+/*
+  Styling for your score marks container.
+  We position them below the bar.
+*/
+.new-progress-marks-container {
+  position: absolute;
+  top: 100%; /* Start right at the bottom of the bar */
+  left: 0;
+  width: 100%;
+  height: 20px; /* Give it some space */
+  margin-top: 4px;
+  pointer-events: none;
+}
+
+.new-progress-mark {
+  position: absolute;
+  transform: translateX(-50%); /* Center the mark */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new-progress-mark-line {
+  width: 2px;
+  height: 5px;
+  background-color: #aaa;
+}
+
+.new-progress-mark-label {
+  font-size: 12px;
+  color: #555;
+  font-weight: bold;
+}

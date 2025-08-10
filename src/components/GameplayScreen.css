@@ -1,0 +1,260 @@
+/* src/components/GameplayScreen.css - FINAL VERSION WITH RESPONSIVE FONT SIZE */
+
+/* --- Base Screen Layout (Now using CSS Grid) --- */
+.game-screen {
+  background-image: url('../assets/images/game-map-background.jpg');
+  background-color: #74c0fc;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: 75px 1fr;
+  grid-template-areas:
+    "header"
+    "main";
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* --- Header Overlay --- */
+.map-ui-overlay {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.screen-title-on-map {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Main Content Area --- */
+.game-container {
+  grid-area: main;
+  overflow: hidden; /* IMPORTANT: No scrolling here */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem; /* Reduced padding for small portrait screens */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 
+============================================
+MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
+============================================
+*/
+
+.game-content {
+  display: flex;
+  flex-direction: column; 
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: transform 0.2s ease-out; /* Optional: adds a smooth transition */
+}
+
+.problem-area,
+.choices-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* --- CHANGE 1: Define this as a container --- */
+  container-type: inline-size;
+  container-name: problem-area-container;
+}
+
+/* --- Expression Box Styling with Responsive Font --- */
+.expression-container {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: rgba(230, 240, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  min-height: 4em; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* --- CHANGE 2: Set font size relative to the container's width --- */
+  font-size: 3.5cqi;
+}
+
+
+#gameplay-header-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+.stat-item span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+.stat-item.time span {
+  color: #ff6b6b; 
+}
+#pause-btn {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  padding: 0;
+  background-color: #00b8d4;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#choices-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+
+/* 
+============================================
+TABLET & DESKTOP STYLES
+============================================
+*/
+@media (min-width: 800px) {
+  .game-container {
+    padding: 2rem; /* The padding correctly increases for larger screens */
+  }
+  .game-content {
+    flex-direction: row;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+  }
+  .problem-area,
+  .choices-area {
+    flex: 1;
+  }
+  #gameplay-header-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+  }
+  .stat-item {
+    flex-direction: row; 
+    gap: 0.5rem;
+    font-size: 1rem;
+    justify-content: center;
+  }
+  #choices-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
+
+/* 
+============================================
+UPDATED: MOBILE LANDSCAPE STYLES
+============================================
+*/
+@media (orientation: landscape) and (max-height: 500px) {
+  .game-screen {
+    grid-template-rows: 60px 1fr;
+  }
+  .map-ui-overlay {
+    padding: 0 10px;
+  }
+  .screen-title-on-map {
+    font-size: 1.1rem;
+    flex-shrink: 1;
+    margin: 0 5px;
+  }
+
+  .game-container {
+    padding: 0.75rem; /* This matches the new base style, which is fine */
+  }
+
+  .game-content {
+    flex-direction: row;
+    padding: 1rem;
+    gap: 1rem;
+    max-width: 95vw;
+    transform: scale(0.7); 
+  }
+
+  .problem-area,
+  .choices-area {
+    flex: 1;
+    min-width: 0; 
+  }
+  .problem-area > p:first-of-type {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  .problem-area > h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  #gameplay-header-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .stat-item {
+    font-size: 0.7rem;
+    gap: 2px;
+  }
+  .stat-item span {
+    font-size: 1.2rem;
+  }
+  #pause-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    justify-self: center; 
+    align-self: center;
+  }
+
+  #choices-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .choices-area .score-bonus {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+}

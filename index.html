@@ -5,16 +5,32 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- 1. UPDATE THE TITLE -->
     <title>Trig Proof Racer</title>
 
-    <!-- 2. ADD THE GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- 3. ADD THE MATHJAX SCRIPT -->
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- ==================================================================== -->
+    <!-- ADD THIS MATHJAX CONFIGURATION SCRIPT -->
+    <script>
+      window.MathJax = {
+        svg: {
+          // This is the magic setting. It makes the math scale to fit its container.
+          adaptive: true,
+          // This prevents the math from becoming unreadably small.
+          minScale: 0.6 
+        },
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['\\[', '\\]']]
+        }
+      };
+    </script>
+    <!-- ==================================================================== -->
+
+    <!-- Your existing MathJax script now uses the SVG renderer for best results with scaling -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
   </head>
   <body>

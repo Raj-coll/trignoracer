@@ -1,21 +1,25 @@
-// src/App.jsx
+// src/App.jsx - UPDATED
+
+// --- Core React and Game Logic Imports ---
 import { useState, useEffect, useCallback } from 'react';
 import { useSocket, socket } from './hooks/useSocket';
 import StartScreen from './components/StartScreen';
 import LevelSelectionScreen from './components/LevelSelectionScreen';
-import GlobalHeader from './components/GlobalHeader';
 import GameplayScreen from './components/GameplayScreen';
 import AdminPage from './components/AdminPage';
 import WaitingScreen from './components/WaitingScreen';
-import LevelCompleteModal from './components/LevelCompleteModal'; 
+import LevelCompleteModal from './components/LevelCompleteModal';
 import { problems } from './data/gameData';
+import './components/GameplayScreen.css';
+import FullscreenButton from './components/FullscreenButton'; // <-- 1. IMPORT THE BUTTON
 
 function App() {
+  // --- All your state and handlers are unchanged ---
   const [currentScreen, setCurrentScreen] = useState('start');
   const [activeLevel, setActiveLevel] = useState(null);
   const [gameMode, setGameMode] = useState('solo');
   const [roomId, setRoomId] = useState(null);
-  const [gameResult, setGameResult] = useState(null); 
+  const [gameResult, setGameResult] = useState(null);
 
   const handleGameStart = useCallback((data) => {
     setRoomId(data.room);
@@ -84,7 +88,7 @@ function App() {
       case 'start':
         return <StartScreen onPlayClick={handlePlayClick} onVersusClick={handleVersusClick} />;
       case 'level_select':
-        return <LevelSelectionScreen onLevelSelect={handleLevelSelect} />;
+        return <LevelSelectionScreen onLevelSelect={handleLevelSelect} onBackClick={handleGoBack} />;
       case 'gameplay':
         return (
           <GameplayScreen
@@ -104,13 +108,13 @@ function App() {
   };
 
   return (
-    <div>
-      {!gameResult && currentScreen !== 'start' && currentScreen !== 'admin' && currentScreen !== 'waiting' && (
-        <GlobalHeader onBackClick={handleGoBack} />
-      )}
+    <>
+      {/* 2. Add the button here. It will stay on screen while the content below changes. */}
+      <FullscreenButton />
       
       {renderScreens()}
 
+      {/* The rest of the modal logic is unchanged */}
       {gameResult && gameMode === 'solo' && gameResult.win && (
         <LevelCompleteModal
           result={gameResult}
@@ -138,7 +142,7 @@ function App() {
             </div>
           </div>
       )}
-    </div>
+    </>
   );
 }
 
