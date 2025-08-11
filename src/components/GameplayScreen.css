@@ -73,15 +73,25 @@ MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
   transition: transform 0.2s ease-out; /* Optional: adds a smooth transition */
 }
 
-.problem-area,
+/* UPDATED: Gave each container a unique name for best practice */
+.problem-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
+  container-name: problem-card;
+  overflow-y: auto; /* NEW: Add vertical scroll if content is too tall */
+  padding-right: 0.5rem; /* NEW: Add space for the scrollbar to prevent overlap */
+  padding-bottom: 1rem; /* NEW: Add space at the bottom of the scrollable area */
+}
 .choices-area {
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* --- CHANGE 1: Define this as a container --- */
   container-type: inline-size;
-  container-name: problem-area-container;
+  container-name: choices-card;
 }
+
 
 /* --- Expression Box Styling with Responsive Font --- */
 .expression-container {
@@ -90,11 +100,12 @@ MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
   background-color: rgba(230, 240, 255, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.1);
   min-height: 4em; 
+  max-height: 12em;
   display: flex;
   align-items: center;
-  justify-content: center;
-  /* --- CHANGE 2: Set font size relative to the container's width --- */
-  font-size: 3.5cqi;
+  justify-content: flex-start;
+  overflow: auto;
+  font-size: clamp(1rem, 3.5cqi, 1.8rem);
 }
 
 
@@ -151,7 +162,7 @@ TABLET & DESKTOP STYLES
 */
 @media (min-width: 800px) {
   .game-container {
-    padding: 2rem; /* The padding correctly increases for larger screens */
+    padding: 2rem;
   }
   .game-content {
     flex-direction: row;
@@ -173,88 +184,88 @@ TABLET & DESKTOP STYLES
     font-size: 1rem;
     justify-content: center;
   }
+
   #choices-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
   }
 }
 
 /* 
 ============================================
-UPDATED: MOBILE LANDSCAPE STYLES
+UPDATED: MOBILE LANDSCAPE STYLES (NOW FULLY RESPONSIVE)
 ============================================
 */
 @media (orientation: landscape) and (max-height: 500px) {
   .game-screen {
-    grid-template-rows: 60px 1fr;
+    grid-template-rows: 50px 1fr;
   }
-  .map-ui-overlay {
-    padding: 0 10px;
-  }
-  .screen-title-on-map {
-    font-size: 1.1rem;
-    flex-shrink: 1;
-    margin: 0 5px;
-  }
-
   .game-container {
-    padding: 0.75rem; /* This matches the new base style, which is fine */
+    padding: 0.5rem;
   }
-
   .game-content {
     flex-direction: row;
-    padding: 1rem;
-    gap: 1rem;
-    max-width: 95vw;
-    transform: scale(0.7); 
+    padding: 0.5rem;
+    gap: 0.5rem;
+    max-width: 100%;
+  }
+  .problem-area {
+    flex: 1.2;
+    min-width: 0;
+  }
+  .choices-area {
+    flex: 0.8;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
   }
 
-  .problem-area,
-  .choices-area {
-    flex: 1;
-    min-width: 0; 
-  }
-  .problem-area > p:first-of-type {
-    font-size: 0.8rem;
-    line-height: 1.2;
-    margin-bottom: 0.75rem;
-  }
-  .problem-area > h3 {
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-  }
+  /* --- START: FULLY RESPONSIVE STYLES FOR RIGHT CARD --- */
+  
   #gameplay-header-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2cqi;
+    padding: 1cqi 1.5cqi;
+    margin-bottom: 2cqi;
   }
+  
   .stat-item {
-    font-size: 0.7rem;
-    gap: 2px;
+    flex-direction: row;
+    font-size: clamp(0.4rem, 2.5cqi, 0.6rem);
+    gap: 1.5cqi;
   }
   .stat-item span {
-    font-size: 1.2rem;
+    font-size: clamp(0.7rem, 5cqi, 1rem);
   }
   #pause-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-    justify-self: center; 
+    width: clamp(26px, 11cqi, 38px);
+    height: clamp(26px, 11cqi, 38px);
+    font-size: clamp(0.8rem, 5.5cqi, 1.1rem);
+    justify-self: center;
     align-self: center;
+  }
+
+  .choices-area .score-bonus {
+    font-size: clamp(0.6rem, 4cqi, 0.8rem);
+    margin-bottom: 1.5cqi;
+    text-align: center;
   }
 
   #choices-container {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1.5cqi;
+    flex-grow: 1;
   }
 
-  .choices-area .score-bonus {
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    text-align: center;
+  #choices-container button {
+    padding: 2cqi;
+    font-size: clamp(0.65rem, 4.5cqi, 0.9rem);
+    min-height: 28px;
+    border-radius: 2cqi;
   }
+  /* --- END: FULLY RESPONSIVE STYLES FOR RIGHT CARD --- */
 }
