@@ -22,9 +22,9 @@ export const formulas = [
 export const problems = {
     "1": {
         id: "problem1",
-        title: "Prove: (tanθ + secθ - 1) / (tanθ - secθ + 1) = (1 + sinθ) / cosθ",
+        // MODIFIED: Added '@@' for line break in modal
+        title: "Prove: (tanθ + secθ - 1) / (tanθ - secθ + 1) @@ = (1 + sinθ) / cosθ",
         moves: { easy: 40, medium: 30, hard: 25 },
-        // === CHANGE: Added score thresholds for stars ===
         scoreThresholds: { oneStar: 3500, twoStars: 6000, threeStars: 10750 },
         steps: [
             { currentLHS: "(tanθ + secθ - 1) / (tanθ - secθ + 1)", explanation: "Replace '1' in the numerator using sec²θ - tan²θ = 1.", correctFormulaId: "pythagorean2_alt", distractorFormulaIds: ["pythagorean1", "quotient1", "reciprocal1"], nextLHS: "(tanθ + secθ - (sec²θ - tan²θ)) / (tanθ - secθ + 1)" },
@@ -39,9 +39,9 @@ export const problems = {
     },
     "2": {
         id: "problem2",
-        title: "Prove: sin²θ / (1 - cosθ) = 1 + cosθ (assuming 1 - cosθ ≠ 0)",
+        // MODIFIED: Added '@@' for line break in modal
+        title: "Prove: sin²θ / (1 - cosθ) @@ = 1 + cosθ (assuming 1 - cosθ ≠ 0)",
         moves: { easy: 20, medium: 15, hard: 10 },
-        // === CHANGE: Added score thresholds for stars ===
         scoreThresholds: { oneStar: 2000, twoStars: 3000, threeStars: 5000 },
         steps: [
             { currentLHS: "sin²θ / (1 - cosθ)", explanation: "Replace sin²θ using sin²θ + cos²θ = 1.", correctFormulaId: "pythagorean1", distractorFormulaIds: ["pythagorean2", "quotient1", "reciprocal1"], nextLHS: "(1 - cos²θ) / (1 - cosθ)" },

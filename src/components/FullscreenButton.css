@@ -1,0 +1,69 @@
+/* src/components/FullscreenButton.css */
+
+.fullscreen-button {
+  /* --- Base Styles --- */
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative; /* Crucial for positioning the icon parts */
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+}
+
+/* --- Magical Glow on Hover --- */
+.fullscreen-button:hover,
+.fullscreen-button:focus-visible {
+  background: rgba(0, 0, 0, 0.6);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 25px rgba(72, 219, 251, 0.4);
+  outline: none;
+}
+
+/* --- The Icon Parts (The Magic!) --- */
+/* We use ::before and ::after to create the two corner brackets */
+.fullscreen-button::before,
+.fullscreen-button::after {
+  content: '';
+  position: absolute;
+  width: 10px;  /* Width of the bracket lines */
+  height: 10px; /* Height of the bracket lines */
+  border-color: white;
+  border-style: solid;
+  /* This transition animates the icon's transformation */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* --- Default State: "Enter Fullscreen" Icon --- */
+/* (Brackets pointing outwards) */
+
+/* Creates the TOP-LEFT bracket */
+.fullscreen-button::before {
+  top: 10px;
+  left: 10px;
+  border-width: 3px 0 0 3px; /* Top and Left borders */
+}
+
+/* Creates the BOTTOM-RIGHT bracket */
+.fullscreen-button::after {
+  bottom: 10px;
+  right: 10px;
+  border-width: 0 3px 3px 0; /* Bottom and Right borders */
+}
+
+
+/* --- Active State: "Exit Fullscreen" Icon --- */
+/* (Brackets pointing inwards) */
+/* This class will be toggled by React */
+
+/* Moves and rotates the TOP-LEFT bracket to become the BOTTOM-LEFT bracket */
+.fullscreen-button.fullscreen-active::before {
+  transform: translate(0px, 18px) rotate(180deg);
+}
+
+/* Moves and rotates the BOTTOM-RIGHT bracket to become the TOP-RIGHT bracket */
+.fullscreen-button.fullscreen-active::after {
+  transform: translate(0px, -18px) rotate(180deg);
+}

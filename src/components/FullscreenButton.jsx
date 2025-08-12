@@ -1,60 +1,44 @@
-// src/components/FullscreenButton.jsx - UPDATED
+// src/components/FullscreenButton.jsx
 
 import React, { useState, useEffect } from 'react';
+// 1. Import the new CSS file
+import './FullscreenButton.css';
 
 const FullscreenButton = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // This function checks the current fullscreen state
-  const onFullscreenChange = () => {
-    setIsFullscreen(!!document.fullscreenElement);
-  };
-
-  // Add an event listener to update the state when it changes
   useEffect(() => {
+    const onFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
     document.addEventListener('fullscreenchange', onFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
   const toggleFullscreen = () => {
-    if (!isFullscreen) {
-      // Enter fullscreen
-      const elem = document.documentElement;
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) { /* Safari */
-        elem.webkitRequestFullscreen();
-      }
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+      });
     } else {
-      // Exit fullscreen
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) { /* Safari */
-        document.webkitExitFullscreen();
       }
     }
   };
 
+  // 2. Build the className string dynamically
+  // It always has "fullscreen-button".
+  // If `isFullscreen` is true, it ALSO gets "fullscreen-active".
+  const buttonClass = `fullscreen-button ${isFullscreen ? 'fullscreen-active' : ''}`;
+
   return (
+    // 3. Use the dynamic className. Aria-label improves accessibility.
     <button 
       onClick={toggleFullscreen} 
-      style={{
-        position: 'fixed', // Use 'fixed' to stay in the viewport
-        top: '10px', 
-        right: '10px', 
-        zIndex: 2000,     // High z-index to be on top of everything
-        padding: '8px 12px',
-        fontSize: '14px',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        color: 'white',
-        border: '1px solid white',
-        borderRadius: '8px',
-        cursor: 'pointer'
-      }}
-    >
-      {/* Change text based on current state */}
-      {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-    </button>
+      className={buttonClass}
+      aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+    />
   );
 };
 

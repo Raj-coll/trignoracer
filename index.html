@@ -7,37 +7,46 @@
     
     <title>Trig Proof Racer</title>
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- ==================================================================== -->
-    <!-- ADD THIS MATHJAX CONFIGURATION SCRIPT -->
+    <!--  START: Correct MathJax Configuration and Script                     -->
+    <!-- ==================================================================== -->
+
+    <!-- This script correctly configures MathJax before it loads -->
     <script>
       window.MathJax = {
-        svg: {
-          // This is the magic setting. It makes the math scale to fit its container.
-          adaptive: true,
-          // This prevents the math from becoming unreadably small.
-          minScale: 0.6 
-        },
+        // Options for the TeX (LaTeX) input processor
         tex: {
           inlineMath: [['\\(', '\\)']],
           displayMath: [['\\[', '\\]']]
+        },
+        // Options for the SVG output processor
+        svg: {
+          // This enables adaptive scaling of math to fit its container width.
+          adaptive: true, 
+          // This sets a minimum scaling factor to prevent math from becoming unreadable.
+          minScale: 0.6
         }
       };
     </script>
-    <!-- ==================================================================== -->
 
-    <!-- Your existing MathJax script now uses the SVG renderer for best results with scaling -->
+    <!-- This loads the MathJax library. It must come AFTER the configuration. -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <!-- ==================================================================== -->
+    <!--  END: Correct MathJax Configuration and Script                       -->
+    <!-- ==================================================================== -->
 
   </head>
   <body>
-    <!-- This div is where your entire React application will be placed. Do not change it. -->
+    <!-- This div is where your entire React application will be placed. -->
     <div id="root"></div>
     
-    <!-- This script runs your React application. Do not change it. -->
+    <!-- This script runs your React application. -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

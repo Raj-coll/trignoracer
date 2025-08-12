@@ -1,4 +1,4 @@
-// src/components/GameplayScreen.jsx - FINAL REVERTED VERSION
+// src/components/GameplayScreen.jsx 
 
 import { useState, useEffect, useMemo } from 'react';
 import { problems, getFormulaById } from '../data/gameData';
@@ -7,14 +7,32 @@ import { socket } from '../hooks/useSocket';
 import ScoreProgressBar from './ScoreProgressBar';
 import PlayerResources from './PlayerResources';
 import OrientationLock from './OrientationLock';
+import ProblemModal from './ProblemModal';
+import StepsModal from './StepsModal';
+import usePersistentState from '../hooks/usePersistentState';
+
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 const BONUS_PER_MOVE = 250;
 
-export default function GameplayScreen({ levelId, mode, roomId, onGameEnd }) {
-  // --- All your component logic is unchanged ---
+const EXPRESSION_INITIAL_FONT_SIZE = 1.0; // in rem
+const EXPRESSION_FONT_STEP = 0.1;
+const EXPRESSION_MIN_FONT_SIZE = 0.7;
+const EXPRESSION_MAX_FONT_SIZE = 1.5;
+
+
+// --- 1. ACCEPT THE onBack PROP ---
+export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBack }) {
   const problem = problems[levelId];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isStepsModalOpen, setIsStepsModalOpen] = useState(false);
+  
+  const [expressionFontSize, setExpressionFontSize] = usePersistentState(
+    'expressionFontSize', 
+    EXPRESSION_INITIAL_FONT_SIZE
+  );
+  
   const [isPaused, setIsPaused] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [displayedExpression, setDisplayedExpression] = useState(problem.steps[0].currentLHS);
@@ -35,7 +53,6 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd }) {
     return shuffleArray([correctFormula, ...distractorFormulas]);
   }, [currentStep, isFinished]);
 
-  // RESTORED the original useEffect for MathJax
   useEffect(() => {
     if (window.MathJax) {
       window.MathJax.typesetPromise();
@@ -63,6 +80,13 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd }) {
     }, 1000);
     return () => clearInterval(timerId);
   }, [isFinished, mode, onGameEnd, score, movesLeft, isPaused]);
+
+  const handleDecreaseExpressionSize = () => {
+    setExpressionFontSize(prevSize => Math.max(EXPRESSION_MIN_FONT_SIZE, prevSize - EXPRESSION_FONT_STEP));
+  };
+  const handleIncreaseExpressionSize = () => {
+    setExpressionFontSize(prevSize => Math.min(EXPRESSION_MAX_FONT_SIZE, prevSize + EXPRESSION_FONT_STEP));
+  };
 
   const runBonusScoreAnimation = async (baseScore, remainingMoves) => {
     setFeedback('Bonus Points!');
@@ -133,84 +157,60 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd }) {
     <div id="gameplay-screen" className="game-screen">
       <OrientationLock />
 
+      {/* --- 2. ADD THE BACK BUTTON TO THE UI --- */}
       <div className="map-ui-overlay">
-        <PlayerResources />
+        {/* The back button calls the `onBack` prop from the parent */}
+        <button className="button-icon map-back-button" onClick={onBack}></button>
         <h1 className="screen-title-on-map">{`Level ${levelId}`}</h1>
-        <div className="ui-placeholder"></div>
+        <PlayerResources />
       </div>
 
-      {isPaused && (
-        <div className="pause-overlay">
-          <div className="pause-modal">
-            <h2>Paused</h2>
-            <button className="button-primary" onClick={handlePauseToggle}>
-              Resume
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className="floating-score-container">
-        {floatingScores.map(s => <div key={s.id} className="floating-score">{s.value}</div>)}
-      </div>
+      {isPaused && ( <div className="pause-overlay"><div className="pause-modal"><h2>Paused</h2><button className="button-primary" onClick={handlePauseToggle}>Resume</button></div></div>)}
+      {isModalOpen && (<ProblemModal problemTitle={problem.title} onClose={() => setIsModalOpen(false)} />)}
+      {isStepsModalOpen && (<StepsModal steps={problem.steps} currentStepIndex={currentStepIndex} onClose={() => setIsStepsModalOpen(false)} />)}
+      <div className="floating-score-container">{floatingScores.map(s => <div key={s.id} className="floating-score">{s.value}</div>)}</div>
       
       <main className="game-container">
         <div className="game-content">
           <div className="problem-area">
             <div className="problem-statement">
-              <h3>Problem:</h3>
+              <div className="problem-header"><h3>Problem:</h3><button className="view-full-problem-btn" onClick={() => setIsModalOpen(true)}>View Full</button></div>
               <p id="problem-title">{`\\[${toLatex(problem.title)}\\]`}</p>
             </div>
             <div className="current-expression">
-              <h3>Current Expression (LHS):</h3>
-              
-              {/* RESTORED the original div structure */}
-              <div id="current-lhs" className="expression-container" aria-live="polite">
+              <div className="problem-header">
+                <div className="header-left-group">
+                  <h3>Current Expression (LHS):</h3>
+                  <div className="font-controls font-controls-inline">
+                    <button onClick={handleDecreaseExpressionSize} disabled={expressionFontSize <= EXPRESSION_MIN_FONT_SIZE} aria-label="Decrease font size">A-</button>
+                    <span className="font-size-indicator">{Math.round((expressionFontSize / EXPRESSION_INITIAL_FONT_SIZE) * 100)}%</span>
+                    <button onClick={handleIncreaseExpressionSize} disabled={expressionFontSize >= EXPRESSION_MAX_FONT_SIZE} aria-label="Increase font size">A+</button>
+                  </div>
+                </div>
+                <button className="view-full-problem-btn" onClick={() => setIsStepsModalOpen(true)}>Show Steps</button>
+              </div>
+              <div 
+                id="current-lhs" 
+                className="expression-container" 
+                aria-live="polite"
+                style={{ fontSize: `${expressionFontSize}rem` }}
+              >
                 {displayedExpression ? `\\[${toLatex(displayedExpression)}\\]` : ''}
               </div>
-
-              <p id="step-explanation" className="explanation-text">
-                {isFinished ? 'Proof Complete!' : `Hint: ${currentStep?.explanation}`}
-              </p>
+              <p id="step-explanation" className="explanation-text">{isFinished ? 'Proof Complete!' : `Hint: ${currentStep?.explanation}`}</p>
             </div>
           </div>
           <div className="choices-area">
-            {mode === 'solo' && problem.scoreThresholds && (
-              <ScoreProgressBar score={score} thresholds={problem.scoreThresholds} />
-            )}
-
+            {mode === 'solo' && problem.scoreThresholds && (<ScoreProgressBar score={score} thresholds={problem.scoreThresholds} />)}
             <div id="gameplay-header-info">
-              <div className="stat-item">
-                Moves
-                <span>{movesLeft}</span>
-              </div>
-              <div className="stat-item time">
-                Time
-                <span>{timeLeft}</span>
-              </div>
-              <div className="stat-item">
-                Score
-                <span>{score}</span>
-              </div>
+              <div className="stat-item">Moves<span>{movesLeft}</span></div>
+              <div className="stat-item time">Time<span>{timeLeft}</span></div>
+              <div className="stat-item">Score<span>{score}</span></div>
               <button id="pause-btn" className="button-icon" onClick={handlePauseToggle}>||</button>
             </div>
-            
-            <div className="multiplier-display">
-              {scoreMultiplier > 0.5 && !isFinished && `${scoreMultiplier}x Score Bonus!`}
-            </div>
+            <div className="multiplier-display">{scoreMultiplier > 0.5 && !isFinished && `${scoreMultiplier}x Score Bonus!`}</div>
             <p id="feedback-text" aria-live="polite">{feedback}</p>
-            <div id="choices-container">
-              {choices.map((formula) => (
-                <button
-                  key={formula.id}
-                  className="button-secondary"
-                  onClick={() => handleChoice(formula.id)}
-                  disabled={isAnswered || isFinished || isPaused}
-                >
-                  {`\\(${toLatex(formula.text)}\\)`}
-                </button>
-              ))}
-            </div>
+            <div id="choices-container">{choices.map((formula) => (<button key={formula.id} className="button-secondary" onClick={() => handleChoice(formula.id)} disabled={isAnswered || isFinished || isPaused}>{`\\(${toLatex(formula.text)}\\)`}</button>))}</div>
           </div>
         </div>
       </main>

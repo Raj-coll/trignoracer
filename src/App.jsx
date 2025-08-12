@@ -11,7 +11,7 @@ import WaitingScreen from './components/WaitingScreen';
 import LevelCompleteModal from './components/LevelCompleteModal';
 import { problems } from './data/gameData';
 import './components/GameplayScreen.css';
-import FullscreenButton from './components/FullscreenButton'; // <-- 1. IMPORT THE BUTTON
+import FullscreenButton from './components/FullscreenButton';
 
 function App() {
   // --- All your state and handlers are unchanged ---
@@ -90,12 +90,16 @@ function App() {
       case 'level_select':
         return <LevelSelectionScreen onLevelSelect={handleLevelSelect} onBackClick={handleGoBack} />;
       case 'gameplay':
+        // --- THIS IS THE CAREFUL UPDATE ---
+        // Pass the handleGoBack function as the 'onBack' prop.
+        // This connects the back button in GameplayScreen to the logic in App.jsx.
         return (
           <GameplayScreen
             levelId={activeLevel}
             mode={gameMode}
             roomId={roomId}
             onGameEnd={handleSoloGameEnd}
+            onBack={handleGoBack}
           />
         );
       case 'waiting':
@@ -109,12 +113,10 @@ function App() {
 
   return (
     <>
-      {/* 2. Add the button here. It will stay on screen while the content below changes. */}
       <FullscreenButton />
       
       {renderScreens()}
 
-      {/* The rest of the modal logic is unchanged */}
       {gameResult && gameMode === 'solo' && gameResult.win && (
         <LevelCompleteModal
           result={gameResult}

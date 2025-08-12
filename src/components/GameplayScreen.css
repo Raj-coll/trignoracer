@@ -1,4 +1,4 @@
-/* src/components/GameplayScreen.css - FINAL VERSION WITH RESPONSIVE FONT SIZE */
+/* src/components/GameplayScreen.css */
 
 /* --- Base Screen Layout (Now using CSS Grid) --- */
 .game-screen {
@@ -39,24 +39,28 @@
 .screen-title-on-map {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+/* Add this new rule to your CSS file. You can place it near the other .screen-title-on-map rule. */
 
+.screen-title-on-map {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  
+  /* --- THE FIX --- */
+  /* This moves the element relative to its normal position */
+  position: relative; 
+  /* This shifts the element UP by 30% of its own height */
+  transform: translateY(-220%); 
+}
 /* --- Main Content Area --- */
 .game-container {
   grid-area: main;
-  overflow: hidden; /* IMPORTANT: No scrolling here */
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.75rem; /* Reduced padding for small portrait screens */
+  padding: 0.75rem;
   width: 100%;
   box-sizing: border-box;
 }
-
-/* 
-============================================
-MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
-============================================
-*/
 
 .game-content {
   display: flex;
@@ -70,19 +74,18 @@ MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
   border-radius: 15px;
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: transform 0.2s ease-out; /* Optional: adds a smooth transition */
+  transition: transform 0.2s ease-out;
 }
 
-/* UPDATED: Gave each container a unique name for best practice */
 .problem-area {
   width: 100%;
   display: flex;
   flex-direction: column;
   container-type: inline-size;
   container-name: problem-card;
-  overflow-y: auto; /* NEW: Add vertical scroll if content is too tall */
-  padding-right: 0.5rem; /* NEW: Add space for the scrollbar to prevent overlap */
-  padding-bottom: 1rem; /* NEW: Add space at the bottom of the scrollable area */
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  padding-bottom: 1rem;
 }
 .choices-area {
   width: 100%;
@@ -93,7 +96,7 @@ MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
 }
 
 
-/* --- Expression Box Styling with Responsive Font --- */
+/* --- MODIFIED: Expression Box Styling --- */
 .expression-container {
   padding: 1rem;
   border-radius: 8px;
@@ -105,7 +108,8 @@ MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
   align-items: center;
   justify-content: flex-start;
   overflow: auto;
-  font-size: clamp(1rem, 3.5cqi, 1.8rem);
+  /* REMOVED: The font-size is now controlled by an inline style in React */
+  /* font-size: clamp(1rem, 3.5cqi, 1.8rem); */
 }
 
 
@@ -154,118 +158,139 @@ MOBILE-FIRST RESPONSIVE STYLES (Unchanged)
     gap: 0.75rem;
 }
 
-
-/* 
-============================================
+/* ============================================
 TABLET & DESKTOP STYLES
-============================================
-*/
+============================================ */
 @media (min-width: 800px) {
-  .game-container {
-    padding: 2rem;
-  }
-  .game-content {
-    flex-direction: row;
-    gap: 2rem;
-    padding: 2rem;
-    max-width: 1200px;
-  }
-  .problem-area,
-  .choices-area {
-    flex: 1;
-  }
-  #gameplay-header-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-  }
-  .stat-item {
-    flex-direction: row; 
-    gap: 0.5rem;
-    font-size: 1rem;
-    justify-content: center;
-  }
-
-  #choices-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  .game-container { padding: 2rem; }
+  .game-content { flex-direction: row; gap: 2rem; padding: 2rem; max-width: 1200px; }
+  .problem-area, .choices-area { flex: 1; }
+  #gameplay-header-info { display: grid; grid-template-columns: 1fr 1fr 1fr auto; }
+  .stat-item { flex-direction: row; gap: 0.5rem; font-size: 1rem; justify-content: center; }
+  #choices-container { display: flex; flex-direction: column; gap: 1rem; }
 }
+
+/* ============================================
+MOBILE LANDSCAPE STYLES
+============================================ */
+@media (orientation: landscape) and (max-height: 500px) {
+  .game-screen { grid-template-rows: 50px 1fr; }
+  .game-container { padding: 0.5rem; }
+  .game-content { flex-direction: row; padding: 0.5rem; gap: 0.5rem; max-width: 100%; }
+  .problem-area { flex: 1.2; min-width: 0; }
+  .choices-area { flex: 0.8; min-width: 0; display: flex; flex-direction: column; }
+  #gameplay-header-info { display: flex; justify-content: space-around; align-items: center; gap: 2cqi; padding: 1cqi 1.5cqi; margin-bottom: 2cqi; }
+  .stat-item { flex-direction: row; font-size: clamp(0.4rem, 2.5cqi, 0.6rem); gap: 1.5cqi; }
+  .stat-item span { font-size: clamp(0.7rem, 5cqi, 1rem); }
+  #pause-btn { width: clamp(26px, 11cqi, 38px); height: clamp(26px, 11cqi, 38px); font-size: clamp(0.8rem, 5.5cqi, 1.1rem); justify-self: center; align-self: center; }
+  .choices-area .score-bonus { font-size: clamp(0.6rem, 4cqi, 0.8rem); margin-bottom: 1.5cqi; text-align: center; }
+  #choices-container { display: flex; flex-direction: column; gap: 1.5cqi; flex-grow: 1; }
+  #choices-container button { padding: 2cqi; font-size: clamp(0.65rem, 4.5cqi, 0.9rem); min-height: 28px; border-radius: 2cqi; }
+}
+
 
 /* 
 ============================================
-UPDATED: MOBILE LANDSCAPE STYLES (NOW FULLY RESPONSIVE)
+UPDATED: FEATURE UI STYLES
 ============================================
 */
-@media (orientation: landscape) and (max-height: 500px) {
-  .game-screen {
-    grid-template-rows: 50px 1fr;
-  }
-  .game-container {
-    padding: 0.5rem;
-  }
-  .game-content {
-    flex-direction: row;
-    padding: 0.5rem;
-    gap: 0.5rem;
-    max-width: 100%;
-  }
-  .problem-area {
-    flex: 1.2;
-    min-width: 0;
-  }
-  .choices-area {
-    flex: 0.8;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-  }
 
-  /* --- START: FULLY RESPONSIVE STYLES FOR RIGHT CARD --- */
-  
-  #gameplay-header-info {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 2cqi;
-    padding: 1cqi 1.5cqi;
-    margin-bottom: 2cqi;
-  }
-  
-  .stat-item {
-    flex-direction: row;
-    font-size: clamp(0.4rem, 2.5cqi, 0.6rem);
-    gap: 1.5cqi;
-  }
-  .stat-item span {
-    font-size: clamp(0.7rem, 5cqi, 1rem);
-  }
-  #pause-btn {
-    width: clamp(26px, 11cqi, 38px);
-    height: clamp(26px, 11cqi, 38px);
-    font-size: clamp(0.8rem, 5.5cqi, 1.1rem);
-    justify-self: center;
-    align-self: center;
-  }
-
-  .choices-area .score-bonus {
-    font-size: clamp(0.6rem, 4cqi, 0.8rem);
-    margin-bottom: 1.5cqi;
-    text-align: center;
-  }
-
-  #choices-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5cqi;
-    flex-grow: 1;
-  }
-
-  #choices-container button {
-    padding: 2cqi;
-    font-size: clamp(0.65rem, 4.5cqi, 0.9rem);
-    min-height: 28px;
-    border-radius: 2cqi;
-  }
-  /* --- END: FULLY RESPONSIVE STYLES FOR RIGHT CARD --- */
+.problem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
 }
+
+.problem-header h3 {
+  margin: 0;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* --- NEW: Group for title and inline font controls --- */
+.header-left-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* --- NEW: General styles for font controls --- */
+.font-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Slightly reduced gap for a tighter look */
+}
+
+.font-controls button {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.font-controls button:hover {
+  background-color: #e0e0e0;
+}
+
+.font-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.font-size-indicator {
+  font-size: 0.8rem;
+  color: #eee;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  min-width: 40px;
+  text-align: center;
+}
+
+/* --- NEW: Modifier for smaller, inline controls --- */
+.font-controls-inline button {
+  width: 28px;
+  height: 22px;
+  font-size: 0.8rem;
+}
+
+.view-full-problem-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.view-full-problem-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+#problem-title {
+  max-height: 4.5em;
+  overflow-y: auto;
+  padding: 8px;
+  margin-top: 0;
+  background-color: rgba(230, 240, 255, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: clamp(0.9rem, 3cqi, 1.2rem);
+  scrollbar-width: thin;
+  scrollbar-color: #999 #e0e0e0;
+}
+
+#problem-title::-webkit-scrollbar { width: 8px; }
+#problem-title::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 4px; }
+#problem-title::-webkit-scrollbar-thumb { background: #999; border-radius: 4px; }
+#problem-title::-webkit-scrollbar-thumb:hover { background: #777; }
