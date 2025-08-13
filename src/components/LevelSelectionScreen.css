@@ -82,16 +82,18 @@
 
 
 /* --- Manual Positioning for the Title --- */
-.screen-title-on-map {
+/* In src/components/LevelSelectionScreen.css */
+
+/* --- Manual Positioning for the Title --- */
+#level-selection-screen .screen-title-on-map {
   position: absolute;
-  top: 55px;
-  left: 50%;
+  top: 55px;      /* Change this value to move it up/down */
+  left: 50%;      /* Change this value to move it left/right */
   transform: translateX(-50%);
   z-index: 10;
   color: white;
-  font-family: 'Arial Rounded MT Bold', sans-serif;
+  font-family: var(--font-header);
   font-size: clamp(1.5rem, 5vw, 1.8rem);
-  font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   margin: 0;
   white-space: nowrap;

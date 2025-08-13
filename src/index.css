@@ -84,13 +84,15 @@ body {
   justify-content: flex-end;
 }
 
+/* In src/index.css */
+
 .map-ui-overlay .screen-title-on-map {
   flex-shrink: 0; 
   text-align: center;
   font-family: var(--font-header);
   font-size: 1.8em;
-  color: var(--text-light);
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  color: var(--text-light); /* This makes the text white by default */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.151);
 }
 
 .player-resources {

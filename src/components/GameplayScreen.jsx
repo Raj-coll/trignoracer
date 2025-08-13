@@ -22,7 +22,6 @@ const EXPRESSION_MIN_FONT_SIZE = 0.7;
 const EXPRESSION_MAX_FONT_SIZE = 1.5;
 
 
-// --- 1. ACCEPT THE onBack PROP ---
 export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBack }) {
   const problem = problems[levelId];
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -157,12 +156,23 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
     <div id="gameplay-screen" className="game-screen">
       <OrientationLock />
 
-      {/* --- 2. ADD THE BACK BUTTON TO THE UI --- */}
+      {/* This is the new, perfectly structured header */}
       <div className="map-ui-overlay">
-        {/* The back button calls the `onBack` prop from the parent */}
-        <button className="button-icon map-back-button" onClick={onBack}></button>
+        
+        {/* --- 1. Left Container --- */}
+        <div className="header-left-container">
+          <button className="button-icon map-back-button" onClick={onBack}></button>
+          <PlayerResources />
+        </div>
+
+        {/* --- 2. Middle Element --- */}
         <h1 className="screen-title-on-map">{`Level ${levelId}`}</h1>
-        <PlayerResources />
+
+        {/* --- 3. Right Container --- */}
+        <div className="header-right-container">
+          <button className="button-icon map-quit-button" onClick={onBack}>X</button>
+        </div>
+
       </div>
 
       {isPaused && ( <div className="pause-overlay"><div className="pause-modal"><h2>Paused</h2><button className="button-primary" onClick={handlePauseToggle}>Resume</button></div></div>)}
@@ -171,6 +181,7 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
       <div className="floating-score-container">{floatingScores.map(s => <div key={s.id} className="floating-score">{s.value}</div>)}</div>
       
       <main className="game-container">
+        {/* The rest of your component is unchanged and correct */}
         <div className="game-content">
           <div className="problem-area">
             <div className="problem-statement">

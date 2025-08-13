@@ -32,24 +32,40 @@
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.2);
   z-index: 10;
 }
 
-.screen-title-on-map {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+/* --- NEW RULES FOR BALANCED HEADER --- */
+/* These rules create the balanced containers for true centering */
+.header-left-container,
+.header-right-container {
+  flex: 1; /* This is the magic: makes them take up equal space */
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
-/* Add this new rule to your CSS file. You can place it near the other .screen-title-on-map rule. */
+
+.header-left-container {
+  justify-content: flex-start; /* Aligns items to the left */
+}
+
+.header-right-container {
+  justify-content: flex-end; /* Aligns items to the right */
+}
+
+/* Optional: Style for the new quit button */
+.map-quit-button {
+  background-color: var(--primary-action);
+  border-color: var(--primary-action-dark);
+   display: none;
+}
+/* --- END OF NEW RULES --- */
+
 
 .screen-title-on-map {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  
-  /* --- THE FIX --- */
-  /* This moves the element relative to its normal position */
-  position: relative; 
-  /* This shifts the element UP by 30% of its own height */
-  transform: translateY(-220%); 
 }
+
 /* --- Main Content Area --- */
 .game-container {
   grid-area: main;
