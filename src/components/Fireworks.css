@@ -1,0 +1,100 @@
+/* src/components/Fireworks.css - HIGH INTENSITY VERSION */
+
+.fireworks-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1002;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.firework {
+  position: absolute;
+  opacity: 0;
+}
+
+.fireworks-container.animate .firework {
+  animation: fadeIn 0.1s ease-out forwards;
+}
+
+/* UPDATED: New positions for 5 firework bursts, staggered over time */
+.firework:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+.firework:nth-child(2) { top: 25%; left: 80%; animation-delay: 1.2s; }
+.firework:nth-child(3) { top: 50%; left: 30%; animation-delay: 2.5s; }
+.firework:nth-child(4) { top: 70%; left: 20%; animation-delay: 3.8s; }
+.firework:nth-child(5) { top: 60%; left: 85%; animation-delay: 5s; }
+
+
+.particle-wrapper {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
+.particle-wrapper::before {
+  content: '';
+  position: absolute;
+  /* UPDATED: Particles are slightly larger */
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0;
+  /* UPDATED: Added a glow effect using box-shadow */
+  /* currentColor uses the particle's background-color for the glow */
+  box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+}
+
+.fireworks-container.animate .particle-wrapper::before {
+  /* UPDATED: Animation is now longer and repeats infinitely */
+  animation-name: explode;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+
+/* UPDATED: The explosion is now bigger and lasts longer */
+@keyframes explode {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    /* Particles now travel 180px outwards */
+    transform: translateY(-180px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* UPDATED: New colors and varied animation speeds for more intensity */
+.firework:nth-child(1) .particle-wrapper::before { background-color: #ff69b4; animation-duration: 1.5s; } /* Pink, slow */
+.firework:nth-child(2) .particle-wrapper::before { background-color: #89cff0; animation-duration: 1.2s; } /* Baby Blue, medium */
+.firework:nth-child(3) .particle-wrapper::before { background-color: #ffd700; animation-duration: 1.5s; } /* Gold, fast */
+.firework:nth-child(4) .particle-wrapper::before { background-color: #ffffff; animation-duration: 1.6s; } /* White, very slow */
+.firework:nth-child(5) .particle-wrapper::before { background-color: #00ffff; animation-duration: 1.1s; } /* Cyan, medium-fast */
+
+/* --- Rotations and individual particle delays remain the same to ensure a good burst shape --- */
+.particle-wrapper:nth-child(1) { transform: rotate(0deg); }
+.particle-wrapper:nth-child(2) { transform: rotate(30deg); }
+.particle-wrapper:nth-child(3) { transform: rotate(20deg); }
+.particle-wrapper:nth-child(4) { transform: rotate(90deg); }
+.particle-wrapper:nth-child(5) { transform: rotate(120deg); }
+.particle-wrapper:nth-child(6) { transform: rotate(150deg); }
+.particle-wrapper:nth-child(7) { transform: rotate(180deg); }
+.particle-wrapper:nth-child(8) { transform: rotate(210deg); }
+.particle-wrapper:nth-child(9) { transform: rotate(240deg); }
+.particle-wrapper:nth-child(10) { transform: rotate(270deg); }
+.particle-wrapper:nth-child(11) { transform: rotate(300deg); }
+.particle-wrapper:nth-child(12) { transform: rotate(330deg); }
+
+.fireworks-container.animate .particle-wrapper:nth-child(2)::before { animation-delay: 0.1s; }
+.fireworks-container.animate .particle-wrapper:nth-child(3)::before { animation-delay: 0.05s; }
+.fireworks-container.animate .particle-wrapper:nth-child(4)::before { animation-delay: 0.2s; }
+.fireworks-container.animate .particle-wrapper:nth-child(5)::before { animation-delay: 0.1s; }
+.fireworks-container.animate .particle-wrapper:nth-child(6)::before { animation-delay: 0.25s; }
+.fireworks-container.animate .particle-wrapper:nth-child(7)::before { animation-delay: 0.08s; }
+.fireworks-container.animate .particle-wrapper:nth-child(8)::before { animation-delay: 0.15s; }
+.fireworks-container.animate .particle-wrapper:nth-child(9)::before { animation-delay: 0.12s; }
+.fireworks-container.animate .particle-wrapper:nth-child(10)::before { animation-delay: 0.22s; }
+.fireworks-container.animate .particle-wrapper:nth-child(11)::before { animation-delay: 0.18s; }
+.fireworks-container.animate .particle-wrapper:nth-child(12)::before { animation-delay: 0.04s; }

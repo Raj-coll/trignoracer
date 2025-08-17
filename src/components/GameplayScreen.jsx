@@ -1,6 +1,6 @@
 // src/components/GameplayScreen.jsx 
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { problems, getFormulaById } from '../data/gameData';
 import { toLatex } from '../utils/mathHelpers';
 import { socket } from '../hooks/useSocket';
@@ -10,13 +10,18 @@ import OrientationLock from './OrientationLock';
 import ProblemModal from './ProblemModal';
 import StepsModal from './StepsModal';
 import usePersistentState from '../hooks/usePersistentState';
+import LevelCompleteModal from './LevelCompleteModal';
+import LevelFailedModal from './LevelFailedModal';
+
+// STEP 1: Add the import for the sound file at the top.
+import victorySound from '../assets/sounds/level-complete-fanfare.mp3';
 
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 const BONUS_PER_MOVE = 250;
 
-const EXPRESSION_INITIAL_FONT_SIZE = 1.0; // in rem
+const EXPRESSION_INITIAL_FONT_SIZE = 1.0;
 const EXPRESSION_FONT_STEP = 0.1;
 const EXPRESSION_MIN_FONT_SIZE = 0.7;
 const EXPRESSION_MAX_FONT_SIZE = 1.5;
@@ -45,6 +50,12 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
   const [scoreMultiplier, setScoreMultiplier] = useState(2);
   const currentStep = problem.steps[currentStepIndex];
 
+  const [showLevelCompleteModal, setShowLevelCompleteModal] = useState(false);
+  const [finalResult, setFinalResult] = useState(null);
+  
+  const [showLevelFailedModal, setShowLevelFailedModal] = useState({ show: false, reason: null });
+
+
   const choices = useMemo(() => {
     if (!currentStep || isFinished) return [];
     const correctFormula = getFormulaById(currentStep.correctFormulaId);
@@ -71,21 +82,24 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
         else setScoreMultiplier(0.5);
         if (newTime <= 0) {
           clearInterval(timerId);
-          onGameEnd({ win: false, score, movesLeft });
+          setIsFinished(true);
+          setShowLevelFailedModal({ show: true, reason: 'time' });
           return 0;
         }
         return newTime;
       });
     }, 1000);
     return () => clearInterval(timerId);
-  }, [isFinished, mode, onGameEnd, score, movesLeft, isPaused]);
+  }, [isFinished, mode, isPaused]);
 
-  const handleDecreaseExpressionSize = () => {
-    setExpressionFontSize(prevSize => Math.max(EXPRESSION_MIN_FONT_SIZE, prevSize - EXPRESSION_FONT_STEP));
-  };
-  const handleIncreaseExpressionSize = () => {
-    setExpressionFontSize(prevSize => Math.min(EXPRESSION_MAX_FONT_SIZE, prevSize + EXPRESSION_FONT_STEP));
-  };
+  const calculateStars = useCallback((finalScore, thresholds) => {
+    if (!thresholds) return 0;
+    if (finalScore >= thresholds.threeStars) return 3;
+    if (finalScore >= thresholds.twoStars) return 2;
+    if (finalScore >= thresholds.oneStar) return 1;
+    return 0;
+  }, []);
+
 
   const runBonusScoreAnimation = async (baseScore, remainingMoves) => {
     setFeedback('Bonus Points!');
@@ -97,7 +111,10 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
       await delay(100);
     }
     await delay(1000);
-    onGameEnd({ win: true, baseScore: baseScore, totalScore: baseScore + currentBonus });
+    
+    const totalScore = baseScore + currentBonus;
+    const starCount = calculateStars(totalScore, problem.scoreThresholds);
+    setFinalResult({ totalScore, starCount });
   };
 
   const handleChoice = async (selectedId) => {
@@ -122,13 +139,20 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
 
       const isFinalStep = currentStepIndex >= problem.steps.length - 1;
       if (isFinalStep) {
+        // STEP 2: Play the sound immediately when the final step is completed.
+        const fanfareAudio = new Audio(victorySound);
+        fanfareAudio.volume = 0.7;
+        fanfareAudio.play();
+        
         setIsFinished(true);
         setFeedback('Proof Complete!');
         await delay(1500);
+
         if (mode === 'solo' && newMovesLeft > 0) {
           await runBonusScoreAnimation(newScore, newMovesLeft);
         } else if (mode === 'solo') {
-          onGameEnd({ win: true, baseScore: newScore, totalScore: newScore });
+          const starCount = calculateStars(newScore, problem.scoreThresholds);
+          setFinalResult({ totalScore: newScore, starCount });
         } else {
           socket.emit('proof_completed', { room: roomId });
         }
@@ -143,36 +167,58 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
       setFeedback('');
       setIsAnswered(false);
       if (newMovesLeft <= 0 && mode === 'solo') {
-        onGameEnd({ win: false, score, movesLeft: newMovesLeft });
+        setIsFinished(true);
+        setShowLevelFailedModal({ show: true, reason: 'moves' });
       }
     }
   };
 
-  const handlePauseToggle = () => {
-    setIsPaused(prevIsPaused => !prevIsPaused);
+  useEffect(() => {
+    if (finalResult) {
+      setShowLevelCompleteModal(true);
+    }
+  }, [finalResult]);
+
+
+  const handleNext = () => {
+    onGameEnd({ win: true, ...finalResult });
   };
+
+  const handleRetry = () => {
+    setShowLevelCompleteModal(false);
+    setShowLevelFailedModal({ show: false, reason: null });
+    setFinalResult(null);
+    setIsFinished(false);
+    setIsAnswered(false);
+    setScore(0);
+    setCurrentStepIndex(0);
+    setMovesLeft(problem.moves.medium);
+    setDisplayedExpression(problem.steps[0].currentLHS);
+    setTimeLeft(90);
+    setFeedback('');
+  };
+
+  const handleHome = () => {
+    onBack();
+  };
+
+  const handleDecreaseExpressionSize = () => setExpressionFontSize(prevSize => Math.max(EXPRESSION_MIN_FONT_SIZE, prevSize - EXPRESSION_FONT_STEP));
+  const handleIncreaseExpressionSize = () => setExpressionFontSize(prevSize => Math.min(EXPRESSION_MAX_FONT_SIZE, prevSize + EXPRESSION_FONT_STEP));
+  const handlePauseToggle = () => setIsPaused(prevIsPaused => !prevIsPaused);
 
   return (
     <div id="gameplay-screen" className="game-screen">
       <OrientationLock />
 
-      {/* This is the new, perfectly structured header */}
       <div className="map-ui-overlay">
-        
-        {/* --- 1. Left Container --- */}
         <div className="header-left-container">
           <button className="button-icon map-back-button" onClick={onBack}></button>
           <PlayerResources />
         </div>
-
-        {/* --- 2. Middle Element --- */}
         <h1 className="screen-title-on-map">{`Level ${levelId}`}</h1>
-
-        {/* --- 3. Right Container --- */}
         <div className="header-right-container">
           <button className="button-icon map-quit-button" onClick={onBack}>X</button>
         </div>
-
       </div>
 
       {isPaused && ( <div className="pause-overlay"><div className="pause-modal"><h2>Paused</h2><button className="button-primary" onClick={handlePauseToggle}>Resume</button></div></div>)}
@@ -181,7 +227,6 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
       <div className="floating-score-container">{floatingScores.map(s => <div key={s.id} className="floating-score">{s.value}</div>)}</div>
       
       <main className="game-container">
-        {/* The rest of your component is unchanged and correct */}
         <div className="game-content">
           <div className="problem-area">
             <div className="problem-statement">
@@ -225,6 +270,24 @@ export default function GameplayScreen({ levelId, mode, roomId, onGameEnd, onBac
           </div>
         </div>
       </main>
+
+      {showLevelCompleteModal && (
+        <LevelCompleteModal
+          result={finalResult}
+          problem={problem}
+          onNext={handleNext}
+          onRetry={handleRetry}
+          onHome={handleHome}
+        />
+      )}
+      
+      {showLevelFailedModal.show && (
+        <LevelFailedModal
+          reason={showLevelFailedModal.reason}
+          onRetry={handleRetry}
+          onHome={handleHome}
+        />
+      )}
     </div>
   );
 }

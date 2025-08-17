@@ -1,19 +1,26 @@
-/* src/components/FullscreenButton.css */
+/* src/components/FullscreenButton.css - CAREFULLY MODIFIED */
 
 .fullscreen-button {
-  /* --- Base Styles --- */
+  /* --- THIS IS THE KEY FIX --- */
+  /* These four lines lift the button out of the layout and make it float */
+  position: absolute;
+  z-index: 1000; /* Ensures it's on top of everything */
+  top: 15px;
+  left: 15px;
+
+  /* --- Your Original Base Styles (Unchanged) --- */
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.3);
   width: 44px;
   height: 44px;
   border-radius: 50%;
   cursor: pointer;
-  position: relative; /* Crucial for positioning the icon parts */
+  /* 'position: relative' is no longer needed as 'absolute' overrides it */
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* --- Magical Glow on Hover --- */
+/* --- Magical Glow on Hover (Unchanged) --- */
 .fullscreen-button:hover,
 .fullscreen-button:focus-visible {
   background: rgba(0, 0, 0, 0.6);
@@ -22,48 +29,37 @@
   outline: none;
 }
 
-/* --- The Icon Parts (The Magic!) --- */
-/* We use ::before and ::after to create the two corner brackets */
+/* --- The Icon Parts (Unchanged) --- */
 .fullscreen-button::before,
 .fullscreen-button::after {
   content: '';
   position: absolute;
-  width: 10px;  /* Width of the bracket lines */
-  height: 10px; /* Height of the bracket lines */
+  width: 10px;
+  height: 10px;
   border-color: white;
   border-style: solid;
-  /* This transition animates the icon's transformation */
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* --- Default State: "Enter Fullscreen" Icon --- */
-/* (Brackets pointing outwards) */
-
-/* Creates the TOP-LEFT bracket */
+/* --- Default State: "Enter Fullscreen" Icon (Unchanged) --- */
 .fullscreen-button::before {
   top: 10px;
   left: 10px;
-  border-width: 3px 0 0 3px; /* Top and Left borders */
+  border-width: 3px 0 0 3px;
 }
 
-/* Creates the BOTTOM-RIGHT bracket */
 .fullscreen-button::after {
   bottom: 10px;
   right: 10px;
-  border-width: 0 3px 3px 0; /* Bottom and Right borders */
+  border-width: 0 3px 3px 0;
 }
 
 
-/* --- Active State: "Exit Fullscreen" Icon --- */
-/* (Brackets pointing inwards) */
-/* This class will be toggled by React */
-
-/* Moves and rotates the TOP-LEFT bracket to become the BOTTOM-LEFT bracket */
+/* --- Active State: "Exit Fullscreen" Icon (Unchanged) --- */
 .fullscreen-button.fullscreen-active::before {
   transform: translate(0px, 18px) rotate(180deg);
 }
 
-/* Moves and rotates the BOTTOM-RIGHT bracket to become the TOP-RIGHT bracket */
 .fullscreen-button.fullscreen-active::after {
   transform: translate(0px, -18px) rotate(180deg);
 }

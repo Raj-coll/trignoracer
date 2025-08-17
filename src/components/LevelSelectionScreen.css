@@ -1,4 +1,4 @@
-/* src/components/LevelSelectionScreen.css - UPDATED WITH IMAGE BUTTON */
+/* src/components/LevelSelectionScreen.css - FINAL POLISHED VERSION */
 
 /* ... (all the styles at the top are the same) ... */
 
@@ -34,27 +34,20 @@
 /* --- LANDSCAPE STYLES (For PC and Tablets) --- */
 @media (orientation: landscape) {
   #level-selection-screen {
-    background-image: none;
-    background-color: #3a6ea5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 75px 20px 20px 20px;
   }
 
   .map-viewport {
-    max-width: 500px;
-    aspect-ratio: 9 / 16;
-    height: auto;
-    border-radius: 12px;
+    max-width: none;
+    aspect-ratio: auto;
+    height: 100%;
+    border-radius: 0;
     overflow: hidden;
   }
 
   .level-map {
-    background-image: url('../assets/images/level-map-background.jpg');
+    background-image: url('../assets/images/level-map-landscape.png');
     background-size: cover;
-    border-radius: 12px;
+    border-radius: 0;
   }
   
   .player-resources {
@@ -82,13 +75,10 @@
 
 
 /* --- Manual Positioning for the Title --- */
-/* In src/components/LevelSelectionScreen.css */
-
-/* --- Manual Positioning for the Title --- */
 #level-selection-screen .screen-title-on-map {
   position: absolute;
-  top: 55px;      /* Change this value to move it up/down */
-  left: 50%;      /* Change this value to move it left/right */
+  top: 55px;
+  left: 50%;
   transform: translateX(-50%);
   z-index: 10;
   color: white;
@@ -102,32 +92,25 @@
 
 /* 
  * === BACK BUTTON STYLING (UPDATED FOR IMAGE) ===
- * This is the default style for the button (on mobile).
 */
 .map-back-button {
   position: absolute;
   top: 15px;
   right: 15px;
   z-index: 10;
-
-  /* --- NEW STYLES FOR THE IMAGE --- */
-  background-image: url('../assets/images/back-arrow.png');
-  background-size: contain; /* Makes the image fit inside the button */
+  background-image: url('../assets/images/close-icon.png');
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: transparent; /* Remove default button color */
-  border: none; /* Remove default button border */
-  
-  /* Give the button a size */
+  background-color: transparent;
+  border: none;
   width: 60px;
   height: 60px;
-  
-  cursor: pointer; /* Keep the hand cursor on hover */
+  cursor: pointer;
 }
 
 
-/* --- Level Marker Styling (Unchanged) --- */
-/* ... (the rest of your level marker styles are unchanged) ... */
+/* --- Level Marker Styling (Default) --- */
 .level-marker {
   position: absolute;
   width: clamp(55px, 15vw, 75px);
@@ -155,3 +138,35 @@
 .level-marker.completed .stars { color: #ffee58; }
 .level-marker.locked { background-color: #757575; color: #bdbdbd; border: 4px solid #9e9e9e; cursor: not-allowed; filter: grayscale(80%); }
 .level-marker.locked:hover { transform: translate(-50%, -50%); }
+
+
+/* 
+ * --- MOBILE LANDSCAPE STYLES (WITH MARKER SIZE FIX) ---
+ * These rules ONLY apply to screens that are wide but also short, like a phone held sideways.
+*/
+@media (orientation: landscape) and (max-height: 500px) {
+  #level-selection-screen .screen-title-on-map {
+    top: 10px;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .player-resources {
+    top: 10px;
+    left: 15px;
+  }
+
+  .map-back-button {
+    top: 10px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+  }
+
+  /* --- THIS IS THE NEW RULE --- */
+  /* It overrides the default size of the level markers only for this specific screen type. */
+  .level-marker {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem; /* Adjust font size to fit the smaller marker */
+  }
+}

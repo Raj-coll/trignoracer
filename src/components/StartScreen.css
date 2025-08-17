@@ -1,0 +1,97 @@
+/* src/components/StartScreen.css - UPDATED TO REMOVE THE DARK BOX */
+
+/* --- Main Screen Container --- */
+#start-screen {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url('../assets/images/start-screen-background.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- Content Box (NOW INVISIBLE) --- */
+/* This div still helps us group and center our UI, but it has no visible styling. */
+.start-screen-content {
+  /* REMOVED: background-color, padding, border-radius, box-shadow, backdrop-filter, border */
+  
+  /* KEPT: These rules are still useful for arranging the content vertically. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* --- Game Logo Styling --- */
+.game-logo {
+  color: white;
+  font-family: var(--font-header);
+  font-size: clamp(3rem, 10vw, 5.5rem); /* Slightly larger for more impact */
+  /* This shadow is now very important for readability! */
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.9);
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Menu Buttons Container --- */
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* --- Footer for small icon buttons --- */
+.start-screen-footer {
+  margin-top: 20px;
+  display: flex;
+  gap: 25px;
+}
+
+/* --- General Button Styling --- */
+.button-primary, .button-secondary {
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4); /* Add shadow for readability */
+}
+
+.button-primary {
+  background-color: #4CAF50;
+  color: white;
+}
+.button-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+
+.button-secondary {
+  background-color: #f44336;
+  color: white;
+}
+.button-secondary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
+}
+
+.button-icon {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: white;
+  opacity: 0.8;
+  transition: all 0.2s;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* Add shadow for readability */
+}
+.button-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
