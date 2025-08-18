@@ -1,12 +1,14 @@
 // src/components/StartScreen.jsx
 
-import './StartScreen.css'; // <<< THIS LINE MUST BE HERE AT THE TOP
+import './StartScreen.css';
+import FullscreenButton from './FullscreenButton';
 
-// ... the rest of your component is unchanged ...
 export default function StartScreen({ onPlayClick, onVersusClick }) {
   
   return (
     <div id="start-screen" className="screen">
+      <FullscreenButton /> 
+
       <div className="start-screen-content">
         <h1 className="game-logo">Trig Proof Racer</h1>
         <div className="menu-buttons">

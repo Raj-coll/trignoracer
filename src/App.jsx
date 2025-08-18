@@ -148,7 +148,7 @@ function AppContent() {
 
   return (
     <>
-      <FullscreenButton />
+     {currentScreen === 'start' && <FullscreenButton />}
       
       {renderScreens()}
 

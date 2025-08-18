@@ -1,7 +1,11 @@
 // src/components/WaitingScreen.jsx
 
+import './WaitingScreen.css'; // <-- 1. IMPORT YOUR NEW CSS FILE
+
 // We receive an onCancel function to let the user go back to the start screen.
 export default function WaitingScreen({ onCancel }) {
+  // 2. The rest of your component remains unchanged!
+  // The CSS will be applied automatically because you're using the "waiting-screen" ID.
   return (
     <div id="waiting-screen" className="screen">
       <div className="modal-content">

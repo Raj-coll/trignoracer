@@ -1,0 +1,83 @@
+/* --- Keyframes for the bouncy "pop-in" animation (unchanged) --- */
+@keyframes candyPopIn {
+  0% { opacity: 0; transform: scale(0.5); }
+  70% { opacity: 1; transform: scale(1.05); }
+  100% { transform: scale(1.0); }
+}
+
+/* --- Main screen container (unchanged) --- */
+#waiting-screen {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../assets/images/versus-bg.png');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+}
+
+/* --- The Glossy Candy Modal (unchanged) --- */
+#waiting-screen .modal-content {
+  position: relative;
+  overflow: hidden;
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(135deg, #ff79b0, #f8c37d);
+  padding: 30px 40px;
+  border-radius: 35px;
+  border: 5px solid #ffffff;
+  box-shadow: 
+    inset 0 3px 5px rgba(255, 255, 255, 0.5),
+    inset 0 -5px 10px rgba(0, 0, 0, 0.1),
+    0 10px 25px rgba(219, 52, 111, 0.6);
+  max-width: 480px;
+  width: 90%;
+  animation: candyPopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* --- The Glare Effect (unchanged) --- */
+#waiting-screen .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 10%;
+  right: 10%;
+  height: 30px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+  border-radius: 20px / 10px;
+  opacity: 0.8;
+}
+
+
+/* --- MODIFIED: WHITE TEXT STYLES --- */
+#waiting-screen .modal-content h2 {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  /* CHANGED: Text color is now white */
+  color: #ffffff;
+  /* CHANGED: Shadow is now a soft, dark shadow for contrast */
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.35);
+  margin-bottom: 15px;
+}
+
+#waiting-screen .modal-content p {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 1.1rem;
+  /* CHANGED: Text color is now a slightly transparent white */
+  color: rgba(255, 255, 255, 0.95);
+  /* NEW: Added a subtle shadow for better readability */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+}
+
+/* --- Spinner styles (unchanged) --- */
+.spinner { margin: 20px auto; width: 50px; height: 40px; text-align: center; }
+.spinner > div { background-color: #f0f0f0; height: 100%; width: 6px; display: inline-block; border-radius: 3px; animation: sk-stretchdelay 1.2s infinite ease-in-out; }
+.spinner .rect2 { animation-delay: -1.1s; }
+.spinner .rect3 { animation-delay: -1.0s; }
+.spinner .rect4 { animation-delay: -0.9s; }
+.spinner .rect5 { animation-delay: -0.8s; }
+@keyframes sk-stretchdelay { 0%, 40%, 100% { transform: scaleY(0.4); } 20% { transform: scaleY(1.0); } }

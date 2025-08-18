@@ -1,17 +1,12 @@
-// src/components/GlobalLayout.jsx - NEW FILE
+// src/components/GlobalLayout.jsx
 
 import React from 'react';
-import { Outlet } from 'react-router-dom'; // IMPORTANT: From React Router
-import FullscreenButton from './FullscreenButton';
+import { Outlet } from 'react-router-dom';
 
 const GlobalLayout = () => {
   return (
     <>
-      {/* This button will now appear on every screen wrapped by this layout */}
-      <FullscreenButton />
-
-      {/* The Outlet component renders the current route's component */}
-      {/* (e.g., StartScreen, LevelSelectionScreen, etc.) */}
+      {/* The FullscreenButton has been correctly removed from this file */}
       <main>
         <Outlet />
       </main>

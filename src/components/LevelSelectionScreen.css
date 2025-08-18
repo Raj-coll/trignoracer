@@ -33,9 +33,7 @@
 
 /* --- LANDSCAPE STYLES (For PC and Tablets) --- */
 @media (orientation: landscape) {
-  #level-selection-screen {
-  }
-
+ 
   .map-viewport {
     max-width: none;
     aspect-ratio: auto;
